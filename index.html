@@ -233,31 +233,41 @@
             return Math.abs(vol);
         }
 
-        function updateMaterialUI() {
-            const matKey = document.getElementById('material').value;
-            const mat = MY_CONFIG.materials[matKey];
-            const palette = document.getElementById('color-palette');
-            palette.innerHTML = "";
-            
-            selectedColor = mat.colors[0]; // Reset เป็นสีแรกของวัสดุนั้นๆ
+       function updateMaterialUI() {
+    const matKey = document.getElementById('material').value;
+    const mat = MY_CONFIG.materials[matKey];
+    const palette = document.getElementById('color-palette');
+    
+    // 1. ตรวจสอบว่าสีที่เลือกอยู่เดิม มีอยู่ในวัสดุใหม่ไหม? 
+    // ถ้าไม่มี (เช่น เปลี่ยนจาก PETG ที่เลือกสีแดง ไปเป็น PLA ที่มีแค่สีดำ) ให้เลือกสีแรกของวัสดุใหม่
+    if (!mat.colors.includes(selectedColor)) {
+        selectedColor = mat.colors[0];
+    }
 
-            mat.colors.forEach((hex) => {
-                let dot = document.createElement('div');
-                dot.className = "color-dot";
-                dot.style.width = '30px'; dot.style.height = '30px'; dot.style.borderRadius = '50%';
-                dot.style.backgroundColor = hex; dot.style.cursor = 'pointer';
-                dot.style.border = (selectedColor === hex) ? '3px solid #ff4d4d' : '1px solid #ccc';
-                
-                dot.onclick = () => { 
-                    selectedColor = hex; 
-                    syncModelColor();
-                    updateMaterialUI(); 
-                };
-                palette.appendChild(dot);
-            });
-            syncModelColor();
-            updatePrice();
-        }
+    palette.innerHTML = "";
+    mat.colors.forEach((hex) => {
+        let dot = document.createElement('div');
+        dot.className = "color-dot";
+        dot.style.width = '30px'; 
+        dot.style.height = '30px'; 
+        dot.style.borderRadius = '50%';
+        dot.style.backgroundColor = hex; 
+        dot.style.cursor = 'pointer';
+        
+        // แสดงขอบสีแดงล้อมรอบสีที่เลือกอยู่ปัจจุบัน
+        dot.style.border = (selectedColor === hex) ? '3px solid #ff4d4d' : '1px solid #ccc';
+        
+        dot.onclick = () => { 
+            selectedColor = hex; // อัปเดตสีที่เลือก
+            syncModelColor();    // เปลี่ยนสีโมเดลทันที
+            updateMaterialUI();  // วาด Palette ใหม่เพื่อขยับขอบสีแดงตามมา
+        };
+        palette.appendChild(dot);
+    });
+
+    syncModelColor();
+    updatePrice();
+}
 
         function syncModelColor() {
             if (modelGroup) {
