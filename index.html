@@ -69,11 +69,11 @@
 
             <div class="option-group">
                 <label>1. วัสดุ (Material)</label>
-                <select id="material" onchange="updateMaterialUI()">
-                    <option value="pla_pro">PLA Pro (สวยงาม)</option>
-                    <option value="petg_hf">PETG HF (เหนียว/ทนแดด)</option>
-                    <option value="abs">ABS/ASA (วิศวกรรม/ทนร้อน)</option>
-                </select>
+               <select id="material" onchange="updateMaterialUI()">
+    <option value="pla_pro">PLA Pro</option>
+    <option value="petg_hf">PETG HF (สีส้มพิเศษ)</option>
+    <option value="petg">PETG (ทั่วไป/หลายสี)</option> <option value="abs">ABS/ASA</option>
+</select>
                 <div id="color-palette" style="display:flex; gap:8px; margin-top:10px;"></div>
             </div>
 
@@ -128,16 +128,35 @@
 
     <script>
         const MY_CONFIG = {
-            shopEmail: "varis22521@gmail.com", 
-            setupFee: 50,
-            materials: {
-               pla_pro: { name: "PLA Pro ฟิกเกอร์, ของเล่น, ชิ้นงานต้นแบบ", price: 3.5, density: 1.25, colors: ["#111111"] },
-petg_hf: { name: "PETG HF เหนียว ทน วิศวกรรม" , price: 3.2, density: 1.25, colors: ["#ff9800"] },
-petg: { name: "PETG HF เหนียว ทน วิศวกรรม" , price: 3.0, density: 1.25, colors: ["#3498db","#00cc00","#b266ff","#ff0000"] },
-abs: { name: "ABS/ASA งานวิศวกรรม ทนร้อน ", price: 4.0, density: 1.07, colors: ["#ff9800"] }
-            }
-        };
-
+    shopEmail: "YOUREMAIL@gmail.com", 
+    setupFee: 50,
+    materials: {
+        pla_pro: { 
+            name: "PLA Pro ฟิกเกอร์, ของเล่น, ชิ้นงานต้นแบบ", 
+            price: 3.5, 
+            density: 1.25, 
+            colors: ["#111111"] 
+        },
+        petg_hf: { 
+            name: "PETG HF สีส้ม (เหนียว ทน วิศวกรรม)", 
+            price: 3.2, 
+            density: 1.25, 
+            colors: ["#ff9800"] 
+        },
+        petg: { 
+            name: "PETG มาตรฐาน (เหนียว ทน วิศวกรรม)", 
+            price: 3.0, 
+            density: 1.25, 
+            colors: ["#3498db","#00cc00","#b266ff","#ff0000"] 
+        },
+        abs: { 
+            name: "ABS/ASA งานวิศวกรรม ทนร้อน", 
+            price: 4.0, 
+            density: 1.07, 
+            colors: ["#ff9800"] 
+        }
+    }
+};
         let scene, camera, renderer, controls, mesh, grid, modelVol = 0, currentFileName = "", selectedColor = "", modelDim = "";
 
         function init() {
