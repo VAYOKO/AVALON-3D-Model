@@ -183,25 +183,43 @@
             grid.material.color.set(isDark ? 0x888888 : 0x444444);
         }
 
-        document.getElementById('file-input').addEventListener('change', function(e) {
-            const file = e.target.files[0]; if (!file) return;
-            currentFileName = file.name;
-            document.getElementById('bd-name').innerText = file.name;
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const geometry = new THREE.STLLoader().parse(event.target.result);
-                if (mesh) scene.remove(mesh);
-                mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: selectedColor }));
-                geometry.computeBoundingBox(); geometry.center();
-                const size = new THREE.Vector3(); geometry.boundingBox.getSize(size);
-                modelDim = `${size.x.toFixed(1)}x${size.y.toFixed(1)}x${size.z.toFixed(1)}`;
-                document.getElementById('bd-size').innerText = modelDim;
-                scene.add(mesh);
-                modelVol = calculateVolume(geometry) / 1000;
-                updatePrice();
-            };
-            reader.readAsArrayBuffer(file);
-        });
+       // --- ส่วนการโหลดไฟล์ที่ปรับปรุงใหม่ (บรรทัดประมาณ 160-185) ---
+document.getElementById('file-input').addEventListener('change', function(e) {
+    const file = e.target.files[0]; if (!file) return;
+    currentFileName = file.name;
+    document.getElementById('bd-name').innerText = file.name;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const geometry = new THREE.STLLoader().parse(event.target.result);
+        
+        // ลบโมเดลเก่า (ถ้ามี)
+        if (mesh) scene.remove(mesh);
+        
+        // 1. สร้างตัวโมเดลหลัก
+        mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: selectedColor }));
+        
+        // 2. สร้างเส้นขอบ (Edges) 
+        const edges = new THREE.EdgesGeometry(geometry);
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x333333, linewidth: 1 }); // สีเส้นขอบ
+        const wireframe = new THREE.LineSegments(edges, lineMaterial);
+        
+        // รวมโมเดลและเส้นขอบเข้าด้วยกัน
+        mesh.add(wireframe); 
+        
+        geometry.computeBoundingBox(); 
+        geometry.center();
+        
+        const size = new THREE.Vector3(); 
+        geometry.boundingBox.getSize(size);
+        modelDim = `${size.x.toFixed(1)}x${size.y.toFixed(1)}x${size.z.toFixed(1)}`;
+        document.getElementById('bd-size').innerText = modelDim;
+        
+        scene.add(mesh);
+        modelVol = calculateVolume(geometry) / 1000;
+        updatePrice();
+    };
+    reader.readAsArrayBuffer(file);
+});;
 
         function calculateVolume(geometry) {
             let vol = 0; const pos = geometry.attributes.position;
