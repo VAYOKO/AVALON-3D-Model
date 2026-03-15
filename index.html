@@ -113,6 +113,10 @@
                 📞 โทร: 089-777-3889<br>
                 🆔 LINE: varis22521<br>
                 🌐 FB: Avalonrobotics
+                <div style="margin-top: 20px; padding: 10px; border-top: 2px solid var(--border); font-size: 0.75rem; color: #888; text-align: center;">
+    © สงวนลิขสิทธิ์ ทรัพย์สินทางปัญญาของบริษัท MoveOnPlus.Co.,Ltd<br>
+    ห้ามคัดลอก หรือดัดแปลงโดยไม่ได้รับอนุญาต
+</div>
             </div>
         </div>
 
@@ -185,6 +189,7 @@
 
        // --- ส่วนการโหลดไฟล์ที่ปรับปรุงใหม่ (บรรทัดประมาณ 160-185) ---
 // ในฟังก์ชัน init (ตรงส่วนโหลดไฟล์):
+// --- แก้ไขเฉพาะฟังก์ชันโหลดไฟล์ในส่วน <script> ---
 document.getElementById('file-input').addEventListener('change', function(e) {
     const file = e.target.files[0]; if (!file) return;
     currentFileName = file.name;
@@ -192,30 +197,45 @@ document.getElementById('file-input').addEventListener('change', function(e) {
     const reader = new FileReader();
     reader.onload = function(event) {
         const geometry = new THREE.STLLoader().parse(event.target.result);
+        
+        // ล้างของเก่าออก
         if (mesh) scene.remove(mesh);
         
-        // 1. สร้าง Group เพื่อรวมตัวงานและเส้นขอบ
-        mesh = new THREE.Group(); 
-        
-        // 2. ตัวงานหลัก (ทึบ)
-        const mainMesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: selectedColor }));
-        
-        // 3. เส้นขอบ (Edges)
+        // จัดการให้ Geometry อยู่ตรงกลางตั้งแต่ต้นเพียงครั้งเดียว
+        geometry.center();
+        geometry.computeBoundingBox();
+
+        // สร้าง Group ใหม่
+        mesh = new THREE.Group();
+
+        // 1. ตัวงานทึบ (ใช้ MeshPhong เพื่อความสวยงาม)
+        const mainMesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ 
+            color: selectedColor,
+            flatShading: true // ช่วยให้ดูเป็นเหลี่ยมคมชัดขึ้น
+        }));
+
+        // 2. เส้นขอบ (Edges) - แก้ปัญหา "ไม่ตรง" โดยการดึงจาก geometry ตัวเดียวกัน
         const edges = new THREE.EdgesGeometry(geometry);
-        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x333333, linewidth: 1 });
-        const wireframe = new THREE.LineSegments(edges, lineMaterial);
-        
-        // 4. ใส่ทั้งสองอย่างเข้าไปใน Group
+        const wireframe = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ 
+            color: 0x000000, // เส้นขอบสีดำ
+            linewidth: 1 
+        }));
+
+        // ใส่ทุกอย่างลงใน Group เดียวกัน
         mesh.add(mainMesh);
         mesh.add(wireframe);
-        
-        geometry.computeBoundingBox(); 
-        geometry.center(); // ศูนย์กลางอยู่ตรงกลางเสมอ
-        
-        // 5. ปรับให้วางราบพื้นโลกโดยตรง (วิธีแก้ข้อ 2 ในหน้าเว็บ)
-        // geometry.rotateX(-Math.PI / 2); // หมุน 90 องศาให้นอนลง
-        
+
+        // ปรับให้โมเดลตั้งขึ้นหรือวางราบ (ลองสลับเปิด/ปิดบรรทัดนี้ถ้ายังไม่ราบพื้น)
+        // mesh.rotation.x = -Math.PI / 2; 
+
         scene.add(mesh);
+        
+        // อัปเดตขนาดและราคา
+        const size = new THREE.Vector3();
+        geometry.boundingBox.getSize(size);
+        modelDim = `${size.x.toFixed(1)}x${size.y.toFixed(1)}x${size.z.toFixed(1)}`;
+        document.getElementById('bd-size').innerText = modelDim;
+        
         modelVol = calculateVolume(geometry) / 1000;
         updatePrice();
     };
