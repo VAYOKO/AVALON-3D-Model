@@ -13,39 +13,81 @@
         :root { --bg-main: #ffffff; --bg-sidebar: #f8f9fa; --text-main: #333333; --primary: #d44638; --accent: #0046ad; --card-bg: #ffffff; --border: #e0e0e0; }
         [data-theme="dark"] { --bg-main: #121212; --bg-sidebar: #1e1e1e; --text-main: #e0e0e0; --primary: #ff5252; --accent: #448aff; --card-bg: #2d2d2d; --border: #444444; }
         body { font-family: 'Kanit', sans-serif; margin: 0; display: flex; height: 100vh; background: var(--bg-main); color: var(--text-main); overflow: hidden; }
-        .sidebar { width: 360px; background: var(--bg-sidebar); display: flex; flex-direction: column; border-right: 1px solid var(--border); position: relative; z-index: 10; }
+        
+        /* Sidebar Styles */
+        .sidebar { width: 360px; background: var(--bg-sidebar); display: flex; flex-direction: column; border-right: 1px solid var(--border); position: relative; z-index: 10; flex-shrink: 0; }
         .sidebar-content { padding: 20px; flex-grow: 1; overflow-y: auto; padding-bottom: 240px; }
         .logo-container { text-align: center; margin-bottom: 20px; }
         .logo-container img { max-width: 250px; border-radius: 10px; }
         .option-group { margin-bottom: 15px; }
         label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; color: var(--primary); }
-        select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--card-bg); color: var(--text-main); font-family: inherit; }
-        .upload-btn { display: block; background: #333; color: white; text-align: center; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 15px; }
+        select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--card-bg); color: var(--text-main); font-family: inherit; box-sizing: border-box; }
+        .upload-btn { display: block; background: #333; color: white; text-align: center; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-bottom: 15px; font-size: 1rem; border: none; width: 100%; }
+        .upload-btn:hover { background: #555; }
         .detail-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 10px; font-size: 0.85rem; margin-top: 10px; }
         .detail-row { display: flex; justify-content: space-between; margin-bottom: 6px; border-bottom: 1px dashed var(--border); padding-bottom: 4px; }
-        .payment-box { background: var(--card-bg); padding: 15px; border-radius: 10px; border: 1px solid var(--border); border-left: 5px solid var(--accent); margin-top: 15px; }
-        .qr-btn { background: var(--accent); color: white; border: none; padding: 8px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
+        .payment-box { background: var(--card-bg); padding: 15px; border-radius: 10px; border: 1px solid var(--border); border-left: 5px solid var(--accent); margin-top: 15px; font-size: 0.9rem; }
+        .qr-btn { background: var(--accent); color: white; border: none; padding: 8px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; font-family: inherit; }
         .contact-info { margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border); font-size: 0.85rem; line-height: 1.6; }
         .copyright { margin-top: 15px; font-size: 0.7rem; color: #888; text-align: center; padding-bottom: 20px; }
-        .sidebar-footer { position: absolute; bottom: 0; left: 0; right: 0; background: var(--bg-sidebar); padding: 15px 20px; border-top: 1px solid var(--border); }
+        
+        /* Footer Styles */
+        .sidebar-footer { position: absolute; bottom: 0; left: 0; right: 0; background: var(--bg-sidebar); padding: 15px 20px; border-top: 1px solid var(--border); box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
         .summary-box { background: #000; color: #fff; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 10px; }
         .price-value { font-size: 1.8rem; font-weight: 700; }
-        .order-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
-        .theme-btn { position: absolute; top: 15px; right: 15px; z-index: 100; cursor: pointer; border: none; background: transparent; font-size: 1.2rem; }
-        #render-area { flex-grow: 1; position: relative; }
+        .order-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; font-family: inherit; }
+        .order-btn:hover { opacity: 0.9; }
+        
+        /* Render Area & Main Interface */
+        #render-area { flex-grow: 1; position: relative; overflow: hidden; }
+        .theme-btn { position: absolute; top: 15px; left: 15px; z-index: 100; cursor: pointer; border: none; background: rgba(255,255,255,0.7); padding: 8px; border-radius: 50%; font-size: 1.2rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        [data-theme="dark"] .theme-btn { background: rgba(0,0,0,0.5); }
+        
+        /* Color Palette */
+        .color-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; transition: transform 0.1s; box-sizing: border-box; }
+        .color-dot:hover { transform: scale(1.1); }
+        .color-dot.active { border: 3px solid #ff4d4d !important; }
+
+        /* QR Modal */
         #qr-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center; }
-        .modal-content { background:white; padding:20px; border-radius:15px; text-align:center; color:#333; }
+        .modal-content { background:white; padding:20px; border-radius:15px; text-align:center; color:#333; max-width: 90%; box-sizing: border-box; }
+        
+        /* 1. Welcome Overlay Styles */
+        #welcome-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; display: flex; justify-content: center; align-items: center; color: white; text-align: center; }
+        .welcome-content { background: var(--card-bg); color: var(--text-main); padding: 40px; border-radius: 20px; max-width: 500px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        [data-theme="dark"] .welcome-content { background: #222; }
+        .welcome-content h2 { color: var(--primary); margin-top: 0; font-size: 2rem; }
+        .welcome-content ol { text-align: left; display: inline-block; margin: 20px 0; padding-left: 20px; }
+        .welcome-content li { margin-bottom: 10px; font-size: 1.1rem; }
+        .close-welcome-btn { background: #333; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; font-family: inherit; margin-top: 10px; }
+        .close-welcome-btn:hover { background: #555; }
+
+        /* 3. View Controls Styles */
+        #view-controls { position: absolute; top: 15px; right: 15px; z-index: 100; display: flex; flex-direction: column; gap: 8px; }
+        .view-btn { background: rgba(255,255,255,0.8); border: 1px solid #ccc; color: #333; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.85rem; font-weight: bold; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background 0.2s; }
+        [data-theme="dark"] .view-btn { background: rgba(50,50,50,0.8); border-color: #555; color: #eee; }
+        .view-btn:hover { background: rgba(230,230,230,0.9); }
+        [data-theme="dark"] .view-btn:hover { background: rgba(70,70,70,0.9); }
+
     </style>
 </head>
 <body data-theme="light">
 
-    <button class="theme-btn" onclick="toggleTheme()">🌓</button>
-
-    <div id="qr-modal" onclick="this.style.display='none'">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h3>สแกนชำระเงิน</h3>
-            <img src="105446.jpg" alt="QR Code" style="width:280px; height:auto;" onerror="this.src='https://via.placeholder.com/280?text=Please+Upload+105446.jpg'">
-            <p style="font-size:0.8rem; color:#666; margin-top:10px;">แนบสลิปหลังส่งข้อมูลทาง Gmail</p>
+    <div id="welcome-overlay">
+        <div class="welcome-content">
+            <div class="logo-container">
+                <img src="logo.png" alt="Logo" onerror="this.src='https://via.placeholder.com/150x50?text=3D+SHOP'">
+            </div>
+            <h2>ยินดีต้อนรับสู่บริการปริ้น 3D</h2>
+            <p>ระบบคำนวณราคาออนไลน์ที่ช่วยให้คุณทราบค่าใช้จ่ายเบื้องต้นได้ทันที เพียงทำตามขั้นตอนง่ายๆ:</p>
+            <ol>
+                <li><strong>อัปโหลด:</strong> เลือกไฟล์โมเดล 3D (.stl) ของคุณ</li>
+                <li><strong>ปรับแต่ง:</strong> เลือกวัสดุ สี และความหนาแน่นที่ต้องการ</li>
+                <li><strong>เช็คราคา:</strong> ระบบจะคำนวณราคาประเมินให้ทันที</li>
+                <li><strong>สั่งซื้อ:</strong> กดส่งข้อมูลเพื่อยืนยันออเดอร์ผ่าน Gmail</li>
+            </ol>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 25px;">*หมายเหตุ: ราคาที่แสดงเป็นราคาประเมินเบื้องต้น ไม่รวมค่าจัดส่ง</p>
+            <button class="close-welcome-btn" onclick="closeWelcome()">เริ่มต้นใช้งาน</button>
         </div>
     </div>
 
@@ -63,7 +105,6 @@
                     <option value="pla_pro">PLA Pro [สวยเนียน • ตั้งโชว์]</option>
                     <option value="petg_hf">PETG HF สีส้ม [เหนียวทน • วิศวกรรม]</option>
                     <option value="petg">PETG มาตรฐาน [เหนียวทน • หลายสี]</option>
-                    <!-- <option value="abs">ABS/ASA [ถึก • ทนร้อน • วิศวกรรม]</option> -->
                 </select>
                 <div id="color-palette" style="display:flex; gap:10px; margin-top:10px; flex-wrap: wrap;"></div>
             </div>
@@ -117,42 +158,130 @@
         </div>
     </div>
 
-    <div id="render-area"></div>
+    <div id="render-area">
+        <button class="theme-btn" onclick="toggleTheme()">🌓</button>
+        
+        <div id="view-controls">
+            <button class="view-btn" onclick="setView('perspective')">Perspective</button>
+            <button class="view-btn" onclick="setView('top')">Top View</button>
+            <button class="view-btn" onclick="setView('front')">Front View</button>
+            <button class="view-btn" onclick="setView('side')">Side View</button>
+        </div>
+    </div>
+
+    <div id="qr-modal" onclick="this.style.display='none'">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3>สแกนชำระเงิน</h3>
+            <img src="105446.jpg" alt="QR Code" style="width:280px; height:auto;" onerror="this.src='https://via.placeholder.com/280?text=Please+Upload+105446.jpg'">
+            <p style="font-size:0.8rem; color:#666; margin-top:10px;">แนบสลิปหลังส่งข้อมูลทาง Gmail</p>
+        </div>
+    </div>
 
     <script>
         const MY_CONFIG = {
             shopEmail: "varis22521@gmail.com", 
             setupFee: 50,
             materials: {
-               pla_pro: { name: "PLA Pro สวยเนียน", price: 3.5, density: 1.25, colors: ["#111111"] },
-petg_hf: { name: "PETG HF สีส้ม", price: 3.2, density: 1.25, colors: ["#ff9800"] },
-petg: { name: "PETG หลายสี", price: 3.0, density: 1.25, colors: ["#3498db","#00cc00","#b266ff","#ff0000","#A8A8A8","#FFFF00"] }
-  // abs: { name: "ABS/ASA ทนร้อน", price: 4.0, density: 1.07, colors: ["#ff9800"] } 
+                pla_pro: { name: "PLA Pro สวยเนียน", price: 3.5, density: 1.25, colors: ["#111111"] },
+                petg_hf: { name: "PETG HF สีส้ม", price: 3.2, density: 1.25, colors: ["#ff9800"] },
+                petg: { name: "PETG หลายสี", price: 3.0, density: 1.25, colors: ["#3498db","#00cc00","#b266ff","#ff0000","#A8A8A8","#FFFF00"] }
             }
         };
 
         let scene, camera, renderer, controls, modelGroup, grid, modelVol = 0, currentFileName = "", selectedColor = "#111111", modelDim = "";
+        
+        // สำหรับ View Controls
+        let isDefaultView = true;
+        const defaultCamPos = new THREE.Vector3(250, 250, 250);
+
+        // 1. Welcome Overlay Script
+        function closeWelcome() {
+            const overlay = document.getElementById('welcome-overlay');
+            overlay.style.transition = 'opacity 0.5s';
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 500);
+        }
 
         function init() {
             scene = new THREE.Scene(); scene.background = new THREE.Color(0xffffff);
-            camera = new THREE.PerspectiveCamera(45, (window.innerWidth - 360) / window.innerHeight, 0.1, 10000);
-            camera.position.set(250, 250, 250);
+            
+            // ปรับ Camera เพื่อรองรับมุมมองต่างๆ ได้ดีขึ้น
+            const aspect = (window.innerWidth - 360) / window.innerHeight;
+            camera = new THREE.PerspectiveCamera(45, aspect, 1, 20000);
+            camera.position.copy(defaultCamPos);
+            
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth - 360, window.innerHeight);
             document.getElementById('render-area').appendChild(renderer.domElement);
+            
             scene.add(new THREE.AmbientLight(0xffffff, 0.8));
             let dLight = new THREE.DirectionalLight(0xffffff, 0.5); dLight.position.set(1, 1, 1); scene.add(dLight);
+            
             controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true; // เพิ่มความนุ่มนวล
+            controls.dampingFactor = 0.1;
+            
             grid = new THREE.GridHelper(500, 50, 0x888888, 0xdddddd);
             scene.add(grid);
+            
             updateMaterialUI();
             animate();
+
+            // จัดการ resize หน้าจอ
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function onWindowResize() {
+            camera.aspect = (window.innerWidth - 360) / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth - 360, window.innerHeight);
+        }
+
+        // 3. View Controls Script
+        function setView(viewType) {
+            if (!controls) return;
+            
+            isDefaultView = false;
+            controls.reset(); // รีเซ็ต target ไปที่ 0,0,0
+            let distance = 350; // ระยะห่างเริ่มต้น
+
+            // ปรับระยะห่างตามขนาดโมเดลถ้ามี
+            if (modelDim) {
+                const dims = modelDim.split('x').map(d => parseFloat(d));
+                const maxDim = Math.max(...dims);
+                distance = maxDim * 2.5;
+            }
+
+            switch(viewType) {
+                case 'perspective':
+                    camera.position.copy(defaultCamPos);
+                    isDefaultView = true;
+                    break;
+                case 'top':
+                    camera.position.set(0, distance, 0); // มองจากแกน Y ลงมา
+                    break;
+                case 'front':
+                    camera.position.set(0, 0, distance); // มองเข้าแกน Z
+                    break;
+                case 'side':
+                    camera.position.set(distance, 0, 0); // มองเข้าแกน X
+                    break;
+            }
+            
+            camera.lookAt(new THREE.Vector3(0,0,0));
+            controls.update();
         }
 
         function toggleTheme() {
             const isDark = document.body.getAttribute('data-theme') === 'dark';
             document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
             scene.background = new THREE.Color(isDark ? 0xffffff : 0x121212);
+            // ปรับสี Grid ในโหมดมืด
+            scene.remove(grid);
+            grid = new THREE.GridHelper(500, 50, isDark ? 0x888888 : 0x444444, isDark ? 0xdddddd : 0x222222);
+            scene.add(grid);
         }
 
         document.getElementById('file-input').addEventListener('change', function(e) {
@@ -160,23 +289,61 @@ petg: { name: "PETG หลายสี", price: 3.0, density: 1.25, colors: ["#3
             currentFileName = file.name;
             document.getElementById('bd-name').innerText = file.name;
             const reader = new FileReader();
+            
+            // แสดง Loading เบื้องต้น
+            document.getElementById('bd-size').innerText = "กำลังโหลด...";
+            
             reader.onload = function(event) {
-                const geometry = new THREE.STLLoader().parse(event.target.result);
-                if (modelGroup) scene.remove(modelGroup);
-                geometry.center(); geometry.computeBoundingBox();
+                try {
+                    const geometry = new THREE.STLLoader().parse(event.target.result);
+                    if (modelGroup) scene.remove(modelGroup);
+                    
+                    // ปรับค่าเริ่มต้นโมเดล
+                    geometry.computeBoundingBox();
+                    geometry.computeVertexNormals(); // ช่วยให้แสงเงาสวยขึ้น
+                    
+                    modelGroup = new THREE.Group();
+                    const mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: selectedColor, flatShading: true, side: THREE.DoubleSide }));
+                    const wireframe = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), new THREE.LineBasicMaterial({ color: 0x000000, opacity: 0.3, transparent: true }));
+                    
+                    modelGroup.add(mesh); modelGroup.add(wireframe);
+                    scene.add(modelGroup);
 
-                modelGroup = new THREE.Group();
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: selectedColor, flatShading: true }));
-                const wireframe = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), new THREE.LineBasicMaterial({ color: 0x000000 }));
-                
-                modelGroup.add(mesh); modelGroup.add(wireframe);
-                scene.add(modelGroup);
+                    // 2. Model Snapping: จัดการตำแหน่งโมเดลให้วางบน Grid
+                    const box = new THREE.Box3().setFromObject(modelGroup);
+                    const center = new THREE.Vector3();
+                    box.getCenter(center);
+                    const size = new THREE.Vector3();
+                    box.getSize(size);
+                    
+                    // เลื่อนโมเดลให้จุดศูนย์กลางแกน X, Z อยู่ที่ 0 และฐาน (Bottom) อยู่ที่ Y=0
+                    modelGroup.position.x = -center.x;
+                    modelGroup.position.z = -center.z;
+                    modelGroup.position.y = -box.min.y; // Snap bottom to grid y=0
 
-                const size = new THREE.Vector3(); geometry.boundingBox.getSize(size);
-                modelDim = `${Math.round(size.x)}x${Math.round(size.y)}x${Math.round(size.z)} mm`;
-                document.getElementById('bd-size').innerText = modelDim;
-                modelVol = calculateVolume(geometry) / 1000;
-                updatePrice(); syncModelColor();
+                    // อัปเดตข้อมูลขนาดและน้ำหนัก
+                    modelDim = `${Math.round(size.x)}x${Math.round(size.y)}x${Math.round(size.z)} mm`;
+                    document.getElementById('bd-size').innerText = modelDim;
+                    modelVol = calculateVolume(geometry) / 1000; // cm3
+                    
+                    updatePrice(); 
+                    syncModelColor();
+
+                    // ปรับมุมมอง Perspective ใหม่อัตโนมัติให้เห็นทั้งโมเดล
+                    if (isDefaultView) {
+                        const maxDim = Math.max(size.x, size.y, size.z);
+                        camera.position.set(maxDim*1.5, maxDim*1.5, maxDim*1.5);
+                        camera.lookAt(0, size.y/2, 0);
+                        controls.target.set(0, size.y/2, 0); // ให้ Orbit หมุนรอบกึ่งกลางความสูงโมเดล
+                        controls.update();
+                    }
+
+                } catch (error) {
+                    console.error("Error parsing STL:", error);
+                    alert("ไม่สามารถโหลดไฟล์ STL ได้ กรุณาตรวจสอบไฟล์ของคุณ");
+                    document.getElementById('bd-name').innerText = "-";
+                    document.getElementById('bd-size').innerText = "ข้อผิดพลาด";
+                }
             };
             reader.readAsArrayBuffer(file);
         });
@@ -184,60 +351,131 @@ petg: { name: "PETG หลายสี", price: 3.0, density: 1.25, colors: ["#3
         function calculateVolume(geometry) {
             let vol = 0; const pos = geometry.attributes.position;
             for (let i = 0; i < pos.count; i += 3) {
-                const v1 = new THREE.Vector3().fromBufferAttribute(pos, i), v2 = new THREE.Vector3().fromBufferAttribute(pos, i+1), v3 = new THREE.Vector3().fromBufferAttribute(pos, i+2);
+                const v1 = new THREE.Vector3().fromBufferAttribute(pos, i), 
+                      v2 = new THREE.Vector3().fromBufferAttribute(pos, i+1), 
+                      v3 = new THREE.Vector3().fromBufferAttribute(pos, i+2);
                 vol += v1.dot(v2.cross(v3)) / 6.0;
             }
-            return Math.abs(vol);
+            return Math.abs(vol); // mm3
         }
 
         function updateMaterialUI() {
             const matKey = document.getElementById('material').value;
             const mat = MY_CONFIG.materials[matKey];
+            
+            // ตรวจสอบว่าสีที่เลือกอยู่มีในวัสดุใหม่ไหม ถ้าไม่มีให้เลือกสีแรก
             if (!mat.colors.includes(selectedColor)) selectedColor = mat.colors[0];
 
             const palette = document.getElementById('color-palette');
             palette.innerHTML = "";
             mat.colors.forEach((hex) => {
                 let dot = document.createElement('div');
-                dot.style.width = '30px'; dot.style.height = '30px'; dot.style.borderRadius = '50%';
-                dot.style.backgroundColor = hex; dot.style.cursor = 'pointer';
-                dot.style.border = (selectedColor === hex) ? '3px solid #ff4d4d' : '1px solid #ccc';
-                dot.onclick = () => { selectedColor = hex; syncModelColor(); updateMaterialUI(); };
+                dot.className = `color-dot ${selectedColor === hex ? 'active' : ''}`;
+                dot.style.backgroundColor = hex;
+                dot.style.border = '1px solid #ccc';
+                
+                dot.onclick = () => { 
+                    selectedColor = hex; 
+                    syncModelColor(); 
+                    updateMaterialUI(); 
+                };
                 palette.appendChild(dot);
             });
-            syncModelColor(); updatePrice();
+            syncModelColor(); 
+            updatePrice();
         }
 
         function syncModelColor() {
             if (modelGroup) {
+                // children[0] คือ Mesh
                 modelGroup.children[0].material.color.set(selectedColor);
-                modelGroup.children[1].material.color.set(selectedColor).multiplyScalar(0.4);
+                // children[1] คือ Wireframe (ปรับสีให้ตัดกับโมเดลเล็กน้อยแต่ไม่ดำเข้มเกินไป)
+                modelGroup.children[1].material.color.set(selectedColor).multiplyScalar(0.2); 
             }
         }
 
         function updatePrice() {
             const mat = MY_CONFIG.materials[document.getElementById('material').value];
             const infill = parseFloat(document.getElementById('infill').value);
-            const weight = (modelVol * mat.density * (0.2 + (infill * 0.8))) * 1.15;
-            let total = (weight * mat.price) + MY_CONFIG.setupFee;
-            document.getElementById('bd-weight').innerText = weight.toFixed(1) + " g";
-            document.getElementById('val-price').innerText = total.toLocaleString(undefined, {minimumFractionDigits: 2});
+            
+            if (modelVol > 0) {
+                // สูตรคำนวณน้ำหนักประเมินเบื้องต้น (ปริมาตรจริง * density * ปัจจัย infill) + เผื่อ support เบื้องต้น
+                // ปัจจัย infill แบบง่าย: พื้นผิวทึบประมาณ 20% + ส่วน Infill ตามค่าที่เลือก
+                const infillFactor = 0.20 + (infill * 0.80);
+                const estimatedWeight = modelVol * mat.density * infillFactor; // g
+                
+                let total = (estimatedWeight * mat.price) + MY_CONFIG.setupFee;
+                
+                document.getElementById('bd-weight').innerText = estimatedWeight.toFixed(1) + " g";
+                document.getElementById('val-price').innerText = total.toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            } else {
+                document.getElementById('bd-weight').innerText = "0.0 g";
+                document.getElementById('val-price').innerText = "0.00";
+            }
         }
 
         function processOrder() {
             const userEmail = document.getElementById('user-email').value;
-            if(!currentFileName || !userEmail) return alert("กรุณาอัปโหลดไฟล์และใส่อีเมล");
+            if(!currentFileName || !userEmail || modelVol <= 0) {
+                return alert("กรุณาอัปโหลดไฟล์ไฟล์ STL, ใส่อีเมลของคุณ และรอให้ระบบคำนวณขนาดเสร็จสิ้น");
+            }
+            
+            // ตรวจสอบรูปแบบอีเมลเบื้องต้น
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(userEmail)) {
+                return alert("กรุณากรอกอีเมลให้ถูกต้อง");
+            }
             
             let cName = selectedColor;
-            const colors = {"#111111":"ดำ","#ff9800":"ส้ม","#3498db":"น้ำเงิน","#00cc00":"เขียว","#b266ff":"ม่วง","#ff0000":"แดง"};
-            if(colors[selectedColor]) cName = colors[selectedColor];
+            const colorsMap = {
+                "#111111":"ดำ (PLA/PETG)","#ff9800":"ส้ม (PETG HF/ABS)","#3498db":"น้ำเงิน (PETG)",
+                "#00cc00":"เขียว (PETG)","#b266ff":"ม่วง (PETG)","#ff0000":"แดง (PETG)",
+                "#A8A8A8":"เทา (PETG)","#FFFF00":"เหลือง (PETG)"
+            };
+            if(colorsMap[selectedColor]) cName = colorsMap[selectedColor];
 
-            const details = `ออเดอร์ใหม่: ${currentFileName}\nวัสดุ: ${MY_CONFIG.materials[document.getElementById('material').value].name}\nสี: ${cName}\nInfill: ${document.getElementById('infill').options[document.getElementById('infill').selectedIndex].text}\nราคา: ฿${document.getElementById('val-price').innerText}\nจากเมล: ${userEmail}`;
-            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${MY_CONFIG.shopEmail}&su=สั่งปริ้น3D-${currentFileName}&body=${encodeURIComponent(details)}`);
+            const matName = MY_CONFIG.materials[document.getElementById('material').value].name;
+            const infillText = document.getElementById('infill').options[document.getElementById('infill').selectedIndex].text;
+            const price = document.getElementById('val-price').innerText;
+            const weight = document.getElementById('bd-weight').innerText;
+
+            const subject = encodeURIComponent(`สั่งปริ้น 3D: ${currentFileName}`);
+            const body = encodeURIComponent(
+`ขอเสนอราคาปริ้น 3D
+----------------------------------
+รายละเอียดไฟล์:
+- ชื่อไฟล์: ${currentFileName}
+- ขนาดชิ้นงาน: ${modelDim}
+- น้ำหนักประเมิน: ${weight}
+
+รายละเอียดการตั้งค่า:
+- วัสดุ: ${matName}
+- สี: ${cName} (HEX: ${selectedColor})
+- ความหนาแน่น (Infill): ${infillText}
+
+----------------------------------
+ราคาประเมินเบื้องต้น: ฿${price}
+(รวมค่า Setup ${MY_CONFIG.setupFee}฿, ยังไม่รวมค่าจัดส่ง)
+
+----------------------------------
+ข้อมูลลูกค้า:
+- อีเมลติดต่อ: ${userEmail}
+
+*กรุณาแนบไฟล์ STL มาในอีเมลฉบับนี้ด้วยครับ*
+----------------------------------`
+            );
+
+            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${MY_CONFIG.shopEmail}&su=${subject}&body=${body}`);
         }
 
-        function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
-        init();
+        function animate() { 
+            requestAnimationFrame(animate); 
+            if (controls) controls.update(); // จำเป็นสำหรับ enableDamping
+            renderer.render(scene, camera); 
+        }
+        
+        // เริ่มต้นระบบเมื่อโหลดหน้าเสร็จ
+        window.onload = init;
     </script>
 </body>
 </html>
