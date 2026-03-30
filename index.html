@@ -232,8 +232,13 @@
         function init() {
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xffffff);
-            
-            camera = new THREE.PerspectiveCamera(45, (window.innerWidth > 768 ? window.innerWidth - 360 : window.innerWidth) / window.innerHeight, 0.1, 10000);
+            // แทนที่บรรทัดสร้าง Camera เดิมด้วยอันนี้
+const container = document.getElementById('render-area');
+const width = container.clientWidth;
+const height = container.clientHeight;
+
+camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
+         
             camera.position.set(250, 250, 250);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -267,13 +272,18 @@
             scene.background = new THREE.Color(isDark ? 0xffffff : 0x121212);
         }
 
-        function onWindowResize() {
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            camera.aspect = (w > 768 ? w - 360 : w) / h;
-            camera.updateProjectionMatrix();
-            renderer.setSize(w, h);
-        }
+    function onWindowResize() {
+    const container = document.getElementById('render-area');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    // อัปเดตสัดส่วนกล้องตามพื้นที่แสดงผลจริง
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+
+    // อัปเดตขนาด Renderer ให้พอดีกับพื้นที่
+    renderer.setSize(width, height);
+}
 
         function setView(view) {
             const dist = 350;
