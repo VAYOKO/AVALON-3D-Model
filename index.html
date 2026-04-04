@@ -64,7 +64,7 @@
             box-shadow: 0 -5 -15px rgba(0,0,0,0.05);
         }
         .summary-box { background: #000; color: #fff; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 10px; }
-        .price-value { font-size: 1.8rem; font-weight: 700; }
+        .val-price { font-size: 1.8rem; font-weight: 700; }
         .order-btn { 
             width: 100%; padding: 15px; background: var(--primary); color: white; 
             border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
@@ -104,7 +104,7 @@
             .sidebar.active { transform: translateX(0); }
             .menu-toggle { display: flex; }
             #view-controls { bottom: 20px; }
-            .price-value { font-size: 1.4rem; }
+            .val-price { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -208,10 +208,10 @@
             shopEmail: "varis22521@gmail.com",
             setupFee: 50,
             materials: {
-                pla_pro: { name: "PLA Pro", price: 3.7, density: 1.25, colors: ["#111111","#FFFFFF"], colorNames: {"#111111":"ดำ (Black)", "#FFFFFF":"ขาว (White)"} },
+                   pla_pro: { name: "PLA Pro", price: 3.7, density: 1.25, colors: ["#111111","#FFFFFF"], colorNames: {"#111111":"ดำ (Black)"} },
                 petg_hf: { name: "PETG HF (ส้ม)", price: 3.6, density: 1.25, colors: ["#ff9800"], colorNames: {"#ff9800":"ส้ม (Orange)"} },
                 petg: { name: "PETG มาตรฐาน", price: 3.4, density: 1.25, colors: ["#3498db","#00cc00","#ff0000","#FFFF00","#A8A8A8"], 
-                        colorNames: {"#3498db":"น้ำเงิน", "#00cc00":"เขียว", "#ff0000":"แดง", "#FFFF00":"เหลือง", "#A8A8A8":"เทา"} }
+                        colorNames: {"#3498db":"น้ำเงิน", "#00cc00":"เขียว", "#ff0000":"แดง", "#FFFF00":"เหลือง", "#A8A8A8":"เทา","#FFFFFF":"สีใสโปร่งเเสง"} }
             }
         };
 
