@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AVALON 3D&Model </title>
+    <title>AVALON 3D & Model - Multi-Slicer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -11,7 +11,7 @@
     
     <style>
         :root { 
-            --sidebar-w: 360px; --bg-main: #ffffff; --bg-sidebar: #f8f9fa; 
+            --sidebar-w: 380px; --bg-main: #ffffff; --bg-sidebar: #f8f9fa; 
             --text-main: #333333; --primary: #d44638; --accent: #0046ad; 
             --card-bg: #ffffff; --border: #e0e0e0; 
         }
@@ -55,16 +55,22 @@
         }
         .upload-btn:hover { background: var(--primary); }
 
-        .detail-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 10px; font-size: 0.85rem; }
-        .detail-row { display: flex; justify-content: space-between; margin-bottom: 6px; border-bottom: 1px dashed var(--border); padding-bottom: 4px; }
+        /* Multi-File List Tray */
+        .tray-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px; margin-bottom: 15px; max-height: 200px; overflow-y: auto; }
+        .tray-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
+        .tray-item:last-child { border-bottom: none; }
+        .tray-info { display: flex; flex-direction: column; gap: 2px; max-width: 75%; }
+        .file-name { font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .file-meta { opacity: 0.7; font-size: 0.75rem; }
+        .remove-btn { background: #ff5252; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; }
 
         .sidebar-footer { 
             position: absolute; bottom: 0; left: 0; right: 0; 
             background: var(--bg-sidebar); padding: 15px 20px; border-top: 1px solid var(--border);
-            box-shadow: 0 -5 -15px rgba(0,0,0,0.05);
+            box-shadow: 0 -5px -15px rgba(0,0,0,0.05);
         }
         .summary-box { background: #000; color: #fff; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 10px; }
-        .val-price { font-size: 1.8rem; font-weight: 700; }
+        .price-value { font-size: 1.8rem; font-weight: 700; }
         .order-btn { 
             width: 100%; padding: 15px; background: var(--primary); color: white; 
             border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
@@ -104,7 +110,7 @@
             .sidebar.active { transform: translateX(0); }
             .menu-toggle { display: flex; }
             #view-controls { bottom: 20px; }
-            .val-price { font-size: 1.4rem; }
+            .price-value { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -112,13 +118,12 @@
 
     <div id="welcome-overlay">
         <div class="welcome-card">
-            <h2 style="color:var(--primary); margin-top:0;">AVALON 3D&Model</h2>
-            <p>ยินดีต้อนรับสู่ระบบประเมินราคาปริ้น 3D ออนไลน์</p>
+            <h2 style="color:var(--primary); margin-top:0;">AVALON 3D & Model</h2>
+            <p>ยินดีต้อนรับสู่ระบบ Slicer คำนวณราคาจัดถาดออนไลน์</p>
             <div style="text-align:left; background:var(--bg-sidebar); padding:15px; border-radius:10px; margin:20px 0;">
-                <p>1. 📂 <b>อัปโหลด:</b> เลือกไฟล์ .STL ของคุณ</p>
-                <p>2. ⚙️ <b>ตั้งค่า:</b> เลือกวัสดุและ Infill</p>
-                <p>3. 💰 <b>เช็คราคา:</b> ระบบจะคำนวณราคาให้ทันที</p>
-                <p>4. 📧 <b>สั่งซื้อ:</b> กรอกข้อมูลติดต่อและส่งทาง Gmail</p>
+                <p>1. 📂 <b>อัปโหลด:</b> เลือกไฟล์ .STL (เลือกทีละหลายไฟล์ได้)</p>
+                <p>2. 📦 <b>จัดถาด:</b> เพิ่ม/ลบโมเดลในถาดพิมพ์ได้อิสระ</p>
+                <p>3. 💰 <b>คิดราคาถาดพิมพ์:</b> คิดค่า Setup 50 บาทครั้งเดียวต่อถาด!</p>
             </div>
             <button class="order-btn" onclick="closeWelcome()">เริ่มต้นใช้งาน</button>
         </div>
@@ -140,7 +145,12 @@
                 <img src="logo.png" alt="AVALON" onerror="this.src='https://via.placeholder.com/150x50?text=AVALON+3D'">
             </div>
             
-            <label class="upload-btn">📂 เลือกไฟล์ STL <input type="file" id="file-input" accept=".stl" style="display:none"></label>
+            <label class="upload-btn">📂 เพิ่มไฟล์ STL เข้าถาด <input type="file" id="file-input" accept=".stl" multiple style="display:none"></label>
+
+            <label>📦 รายการชิ้นงานในถาดพิมพ์</label>
+            <div class="tray-container" id="tray-list">
+                <div style="text-align:center; color:#999; padding:20px; font-size:0.85rem;">ยังไม่มีชิ้นงานในถาดพิมพ์</div>
+            </div>
 
             <div class="option-group">
                 <label>1. เลือกวัสดุ (Material)</label>
@@ -169,12 +179,6 @@
                 <input type="text" id="user-line" placeholder="ID Line">
             </div>
 
-            <div class="detail-card">
-                <div class="detail-row"><span>ชื่อไฟล์:</span><span id="bd-name">-</span></div>
-                <div class="detail-row"><span>ขนาด (mm):</span><span id="bd-size">-</span></div>
-                <div class="detail-row"><span>น้ำหนักประเมิน:</span><span id="bd-weight">0.0 g</span></div>
-            </div>
-
             <div style="margin-top:15px; font-size:0.8rem; opacity:0.8;">
                 © สงวนลิขสิทธิ์ ทรัพย์สินทางปัญญาของบริษัท MoveOnPlus.Co.,Ltd <br>
                 <a href="#" onclick="document.getElementById('qr-modal').style.display='flex'" style="color:var(--accent)">ดูข้อมูลการชำระเงิน</a>
@@ -183,10 +187,10 @@
 
         <div class="sidebar-footer">
             <div class="summary-box">
-                <div style="font-size:0.7rem; opacity:0.7;">ราคาสุทธิโดยประมาณ</div>
+                <div style="font-size:0.7rem; opacity:0.7;">ราคาสุทธิรวมทั้งถาด (รวม Setup ฿50 แล้ว)</div>
                 <div class="price-value">฿ <span id="val-price">0.00</span></div>
             </div>
-            <button class="order-btn" onclick="processOrder()">📧 ส่งข้อมูลทาง Gmail</button>
+            <button class="order-btn" onclick="processOrder()">📧 ส่งข้อมูลถาดพิมพ์ทาง Gmail</button>
         </div>
     </div>
 
@@ -206,23 +210,27 @@
     <script>
         const CONFIG = {
             shopEmail: "varis22521@gmail.com",
-            setupFee: 50,
+            setupFee: 50, // คิดราคาตั้งค่าเหมาจ่ายต่อถาด
             materials: {
-                   pla_pro: { name: "PLA Pro", price: 3.7, density: 1.25, colors: ["#111111","#FFFFFF"], colorNames: {"#111111":"ดำ (Black)"} },
+                pla_pro: { name: "PLA Pro", price: 3.7, density: 1.25, colors: ["#111111","#FFFFFF"], colorNames: {"#111111":"ดำ (Black)", "#FFFFFF":"ขาว (White)"} },
                 petg_hf: { name: "PETG HF (ส้ม)", price: 3.6, density: 1.25, colors: ["#ff9800"], colorNames: {"#ff9800":"ส้ม (Orange)"} },
                 petg: { name: "PETG มาตรฐาน", price: 3.4, density: 1.25, colors: ["#3498db","#00cc00","#ff0000","#FFFF00","#A8A8A8"], 
-                        colorNames: {"#3498db":"น้ำเงิน", "#00cc00":"เขียว", "#ff0000":"แดง", "#FFFF00":"เหลือง", "#A8A8A8":"เทา","#FFFFFF":"สีใสโปร่งเเสง"} }
+                        colorNames: {"#3498db":"น้ำเงิน", "#00cc00":"เขียว", "#ff0000":"แดง", "#FFFF00":"เหลือง", "#A8A8A8":"เทา"} }
             }
         };
 
-        let scene, camera, renderer, controls, modelGroup, grid, selectedColor = "#111111", modelVol = 0, currentFileName = "";
+        let scene, camera, renderer, controls, grid, selectedColor = "#111111";
+        
+        // อาเรย์สำหรับเก็บข้อมูลไฟล์ที่อยู่ในถาด
+        let uploadedFiles = []; 
 
         function init() {
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xffffff);
             const container = document.getElementById('render-area');
+            
             camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 10000);
-            camera.position.set(250, 250, 250);
+            camera.position.set(300, 300, 300);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
@@ -265,35 +273,105 @@
             if(view === 'top') camera.position.set(0, dist, 0);
             else if(view === 'front') camera.position.set(0, 0, dist);
             else if(view === 'side') camera.position.set(dist, 0, 0);
-            else camera.position.set(250, 250, 250);
+            else camera.position.set(300, 300, 300);
             controls.update();
         }
 
+        // ระบบรับไฟล์แบบหลายไฟล์พร้อมกัน
         document.getElementById('file-input').addEventListener('change', function(e) {
-            const file = e.target.files[0]; if (!file) return;
-            currentFileName = file.name;
-            document.getElementById('bd-name').innerText = file.name;
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const geometry = new THREE.STLLoader().parse(event.target.result);
-                if (modelGroup) scene.remove(modelGroup);
-                geometry.center();
-                geometry.computeBoundingBox();
-                const mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: selectedColor, flatShading: true }));
-                const wire = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), new THREE.LineBasicMaterial({ color: 0x000000, opacity: 0.1, transparent: true }));
-                modelGroup = new THREE.Group();
-                modelGroup.add(mesh); modelGroup.add(wire);
-                const box = geometry.boundingBox;
-                modelGroup.position.y = (box.max.y - box.min.y) / 2;
-                scene.add(modelGroup);
-                const size = new THREE.Vector3(); box.getSize(size);
-                document.getElementById('bd-size').innerText = `${Math.round(size.x)}x${Math.round(size.y)}x${Math.round(size.z)}`;
-                modelVol = calculateVolume(geometry) / 1000;
-                updatePrice();
-                if(window.innerWidth < 768) toggleMenu();
-            };
-            reader.readAsArrayBuffer(file);
+            const files = e.target.files;
+            if (files.length === 0) return;
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const geometry = new THREE.STLLoader().parse(event.target.result);
+                    geometry.center();
+                    geometry.computeBoundingBox();
+
+                    // สร้าง Mesh สำหรับชิ้นงานชิ้นนี้
+                    const mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: selectedColor, flatShading: true }));
+                    const wire = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), new THREE.LineBasicMaterial({ color: 0x000000, opacity: 0.1, transparent: true }));
+                    
+                    const singleModelGroup = new THREE.Group();
+                    singleModelGroup.add(mesh);
+                    singleModelGroup.add(wire);
+
+                    // Snap Bottom to Bed
+                    const box = geometry.boundingBox;
+                    const size = new THREE.Vector3(); 
+                    box.getSize(size);
+                    singleModelGroup.position.y = size.y / 2;
+
+                    // คำนวณปริมาตรชิ้นงานเดี่ยวๆ
+                    const vol = calculateVolume(geometry) / 1000;
+
+                    // บันทึกข้อมูลเข้า Array ถาดพิมพ์
+                    const fileId = Date.now() + Math.random().toString(36).substr(2, 5);
+                    uploadedFiles.push({
+                        id: fileId,
+                        name: file.name,
+                        volume: vol,
+                        size: `${Math.round(size.x)}x${Math.round(size.y)}x${Math.round(size.z)}`,
+                        group: singleModelGroup
+                    });
+
+                    scene.add(singleModelGroup);
+                    arrangeModels(); // จัดตำแหน่งไม่ให้ทับกัน
+                    renderTrayList(); // อัปเดต UI รายการขวา
+                    updatePrice();
+                };
+                reader.readAsArrayBuffer(file);
+            });
+
+            if(window.innerWidth < 768) setTimeout(toggleMenu, 500);
+            this.value = ""; // รีเซ็ตอินพุตให้เลือกไฟล์ซ้ำได้
         });
+
+        // ฟังก์ชันจัดเรียงโมเดลอัตโนมัติ (เรียงเป็นแถวตามแนวแกน X)
+        function arrangeModels() {
+            let currentX = -((uploadedFiles.length - 1) * 60) / 2; // จัดให้อยู่กึ่งกลาง Grid ถาดพิมพ์
+            uploadedFiles.forEach(file => {
+                file.group.position.x = currentX;
+                file.group.position.z = 0; // เรียงแนวนอนแนวเดียว
+                currentX += 80; // ระยะห่างก้าวถัดไป (สเปซชิ้นละ 8cm โดยประมาณ)
+            });
+        }
+
+        // ฟังก์ชัน Render รายการสิ่งของในถาดพิมพ์ออกมาที่ UI ซ้ายมือ
+        function renderTrayList() {
+            const container = document.getElementById('tray-list');
+            if(uploadedFiles.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:#999; padding:20px; font-size:0.85rem;">ยังไม่มีชิ้นงานในถาดพิมพ์</div>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            uploadedFiles.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = "tray-item";
+                item.innerHTML = `
+                    <div class="tray-info">
+                        <div class="file-name">${index + 1}. ${file.name}</div>
+                        <div class="file-meta">ขนาด: ${file.size} mm | ปริมาตร: ${file.volume.toFixed(1)} cm³</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeFile('${file.id}')">❌</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // ระบบลบไฟล์ทีละชิ้นออกจากถาดพิมพ์
+        function removeFile(id) {
+            const index = uploadedFiles.findIndex(f => f.id === id);
+            if(index > -1) {
+                scene.remove(uploadedFiles[index].group); // ลบวัตถุออกจากฉาก 3D
+                uploadedFiles.splice(index, 1); // เอาออกจากอาเรย์ข้อมูล
+                arrangeModels(); // จัดแถวชิ้นงานใหม่
+                renderTrayList(); // อัปเดตรายการหน้าเว็บ
+                updatePrice(); // คำนวณเงินใหม่
+            }
+        }
 
         function calculateVolume(geo) {
             let vol = 0; const pos = geo.attributes.position;
@@ -312,23 +390,40 @@
             const palette = document.getElementById('color-palette');
             palette.innerHTML = "";
             if (!mat.colors.includes(selectedColor)) selectedColor = mat.colors[0];
+            
             mat.colors.forEach(hex => {
                 const dot = document.createElement('div');
                 dot.style = `width:32px; height:32px; border-radius:50%; background:${hex}; cursor:pointer; border:${selectedColor===hex?'3px solid var(--primary)':'1px solid #ccc'}`;
-                dot.onclick = () => { selectedColor = hex; if(modelGroup) modelGroup.children[0].material.color.set(hex); updateMaterialUI(); };
+                dot.onclick = () => { 
+                    selectedColor = hex; 
+                    uploadedFiles.forEach(f => f.group.children[0].material.color.set(hex)); 
+                    updateMaterialUI(); 
+                };
                 palette.appendChild(dot);
             });
             updatePrice();
         }
 
+        // คำนวณราคาทั้งถาด (บวกราคาต่อกรัมของทุกชิ้น + ค่า Setup 50 บาทแค่ครั้งเดียวต่อถาด)
         function updatePrice() {
             const mat = CONFIG.materials[document.getElementById('material').value];
             const infill = parseFloat(document.getElementById('infill').value);
-            if(modelVol > 0) {
-                const weight = (modelVol * mat.density * (0.2 + (infill * 0.8))) * 1.15;
-                const total = (weight * mat.price) + CONFIG.setupFee;
-                document.getElementById('bd-weight').innerText = weight.toFixed(1) + " g";
+            
+            if(uploadedFiles.length > 0) {
+                let totalWeight = 0;
+                
+                // วนลูปหาผลรวมน้ำหนักของทุกชิ้นในถาดพิมพ์
+                uploadedFiles.forEach(file => {
+                    const weight = (file.volume * mat.density * (0.2 + (infill * 0.8))) * 1.15;
+                    totalWeight += weight;
+                });
+
+                // สูตรคำนวณราคา: (น้ำหนักรวมทั้งถาด * ราคาต่อกรัม) + ค่าพรีเซ็ตตั้งฐานพิมพ์ 50 บาท (คิดครั้งเดียว)
+                const total = (totalWeight * mat.price) + CONFIG.setupFee;
+                
                 document.getElementById('val-price').innerText = total.toLocaleString(undefined, {minimumFractionDigits: 2});
+            } else {
+                document.getElementById('val-price').innerText = "0.00";
             }
         }
 
@@ -337,31 +432,37 @@
             const phone = document.getElementById('user-phone').value;
             const line = document.getElementById('user-line').value;
             
-            if(!currentFileName) return alert("กรุณาอัปโหลดไฟล์ STL ก่อนครับ");
+            if(uploadedFiles.length === 0) return alert("กรุณาเพิ่มไฟล์ STL เข้าถาดพิมพ์อย่างน้อย 1 ไฟล์ก่อนครับ");
             if(!email || !phone) return alert("กรุณากรอกอีเมลและเบอร์โทรศัพท์เพื่อการติดต่อครับ");
 
             const matObj = CONFIG.materials[document.getElementById('material').value];
             const matName = matObj.name;
             const colorName = matObj.colorNames[selectedColor] || selectedColor;
             const infillLabel = document.getElementById('infill').options[document.getElementById('infill').selectedIndex].text;
-            const price = document.getElementById('val-price').innerText;
-            const size = document.getElementById('bd-size').innerText;
+            const totalPrice = document.getElementById('val-price').innerText;
 
-            const body = `รายละเอียดการสั่งปริ้น 3D (AVALON 3D)\n` +
+            // สร้างลิสต์รายการไฟล์ทั้งหมดเพื่อส่งเข้าระบบเมล
+            let fileListString = "";
+            uploadedFiles.forEach((f, i) => {
+                fileListString += `   ${i+1}. ไฟล์: ${f.name} (ขนาด: ${f.size} mm)\n`;
+            });
+
+            const body = `รายละเอียดการสั่งปริ้น 3D แบบจัดถาดรวม (AVALON 3D)\n` +
                          `----------------------------------\n` +
-                         `ไฟล์โมเดล: ${currentFileName}\n` +
-                         `ขนาดชิ้นงาน: ${size} mm\n` +
-                         `วัสดุ: ${matName}\n` +
+                         `จำนวนชิ้นงานในถาดพิมพ์: ${uploadedFiles.length} รายการ\n` +
+                         fileListString + 
+                         `----------------------------------\n` +
+                         `วัสดุทั้งถาด: ${matName}\n` +
                          `สีที่เลือก: ${colorName}\n` +
                          `ความหนาแน่น (Infill): ${infillLabel}\n` +
-                         `ราคาประเมินเบื้องต้น: ฿${price}\n\n` +
+                         `ราคาประเมินรวมทั้งถาด (บวกค่า Setup ฿50 แล้ว): ฿${totalPrice}\n\n` +
                          `ข้อมูลติดต่อลูกค้า\n` +
                          `----------------------------------\n` +
                          `อีเมล: ${email}\n` +
                          `เบอร์โทรศัพท์: ${phone}\n` +
                          `ID Line: ${line || '-'}\n`;
 
-            const mailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${CONFIG.shopEmail}&su=สั่งปริ้น3D-${currentFileName}&body=${encodeURIComponent(body)}`;
+            const mailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${CONFIG.shopEmail}&su=สั่งปริ้น3D_แบบจัดถาดรวม_${uploadedFiles.length}_ชิ้น&body=${encodeURIComponent(body)}`;
             window.open(mailUrl);
         }
 
