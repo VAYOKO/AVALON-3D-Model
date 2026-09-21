@@ -158,9 +158,7 @@
             <p>ชิ้นงาน 3D Print สำเร็จรูป อุปกรณ์ และของเล่น Fidget Clicker คุณภาพสูง</p>
         </div>
 
-        <div class="product-grid" id="product-list">
-            <!-- ตัวอย่างการ์ดสินค้า (สามารถเพิ่ม/แก้ไขได้ที่สคริปต์ PRODUCTSด้านล่าง) -->
-        </div>
+        <div class="product-grid" id="product-list"></div>
     </main>
 
     <!-- Tab 2: ประเมินราคา 3D Print (Slicer) -->
@@ -222,7 +220,6 @@
             <h3 style="margin-top:0; color:var(--primary);" id="modal-title">ชำระเงินสั่งซื้อสินค้า</h3>
             <p id="modal-item-name" style="font-weight:bold;"></p>
             
-            <!-- QR Code -->
             <img src="105446.jpg" alt="QR Code" style="width:200px; border-radius:10px; border:1px solid #ddd;" onerror="this.src='https://via.placeholder.com/200?text=PromptPay+QR'">
             <p style="font-size:0.8rem; color:#666; margin:5px 0 15px 0;">SCB: 221-2-44404-2 (นายวาริส วิภาวนิช)</p>
             
@@ -241,7 +238,7 @@
             </div>
 
             <button class="order-btn" onclick="sendOrderEmail()">📧 ยืนยันการสั่งซื้อผ่าน Gmail</button>
-            <p style="font-size:0.75rem; color:#888; margin-top:10px;">*ระบบจะเปิด Gmail เพื่อให้คุณแนบรูปสลิปการโอนเงินส่งตรงถึงร้านค้า</p>
+            <p style="font-size:0.75rem; color:#888; margin-top:10px;" id="modal-note">*ระบบจะเปิด Gmail เพื่อให้คุณแนบรูปสลิปการโอนเงินส่งตรงถึงร้านค้า</p>
         </div>
     </div>
 
@@ -262,16 +259,14 @@
             }
         };
 
-        // รายการสินค้าหน้าร้าน
         const PRODUCTS = [
             { id: 1, name: "Mini Emergency Push Button Clicker", desc: "สวิตช์ปุ่มกดฉุกเฉินขนาดจิ๋ว Fidget เสียงคลิกแน่นเพลิดเพลิน", price: 150, img: "https://via.placeholder.com/300x200?text=Emergency+Button" },
             { id: 2, name: "AED Box Fidget Clicker", desc: "กล่อง AED จิ๋วพร้อมปุ่มกดจำลอง พกพาง่าย น่ารัก", price: 180, img: "https://via.placeholder.com/300x200?text=AED+Clicker" },
             { id: 3, name: "บริการออกแบบ CAD / 3D Model", desc: "รับออกแบบชิ้นงานวิศวกรรม กลไก สเกลโมเดล ตามสั่ง", price: 500, img: "https://via.placeholder.com/300x200?text=CAD+Design" }
         ];
 
-        let currentOrder = null; // เก็บข้อมูลออเดอร์ที่กำลังจะจ่ายเงิน
+        let currentOrder = null;
 
-        // โหลดสินค้าเข้าหน้าร้าน
         function renderProducts() {
             const container = document.getElementById('product-list');
             container.innerHTML = PRODUCTS.map(p => `
@@ -309,7 +304,6 @@
             if(scene) scene.background = new THREE.Color(isDark ? 0xffffff : 0x121212);
         }
 
-        // Checkout Modal Logic
         function openProductCheckout(prodId) {
             const prod = PRODUCTS.find(p => p.id === prodId);
             currentOrder = { type: 'product', name: prod.name, price: prod.price };
@@ -317,6 +311,7 @@
             document.getElementById('modal-title').innerText = "สั่งซื้อสินค้า";
             document.getElementById('modal-item-name').innerText = prod.name;
             document.getElementById('checkout-price').value = `฿ ${prod.price.toLocaleString()}`;
+            document.getElementById('modal-note').innerText = "*ระบบจะเปิด Gmail เพื่อให้คุณแนบรูปสลิปการโอนเงินส่งตรงถึงร้านค้า";
             document.getElementById('checkout-modal').style.display = 'flex';
         }
 
@@ -331,12 +326,15 @@
                 type: 'slicer', 
                 name: `พิมพ์ 3D ถาดรวม (${uploadedFiles.length} ชิ้น)`, 
                 price: price,
-                details: `วัสดุ: ${matObj.name} | สี: ${colorName} | Infill: ${document.getElementById('infill').value * 100}%`
+                materialName: matObj.name,
+                colorName: colorName,
+                infill: document.getElementById('infill').value * 100
             };
 
             document.getElementById('modal-title').innerText = "สั่งพิมพ์ 3D ถาดนี้";
-            document.getElementById('modal-item-name').innerText = currentOrder.name;
+            document.getElementById('modal-item-name').innerText = `${currentOrder.name}\n[วัสดุ: ${matObj.name} | สี: ${colorName}]`;
             document.getElementById('checkout-price').value = `฿ ${price}`;
+            document.getElementById('modal-note').innerText = "📌 สำคัญ: กรุณาแนบไฟล์ STL และรูปสลิปโอนเงินมาในอีเมลด้วยครับ";
             document.getElementById('checkout-modal').style.display = 'flex';
         }
 
@@ -354,20 +352,29 @@
                            `รายการ: ${currentOrder.name}\n`;
             
             if(currentOrder.type === 'slicer') {
-                mailBody += `รายละเอียดเพิ่มเติม: ${currentOrder.details}\n`;
-                mailBody += `ไฟล์งานที่แนบพิมพ์:\n`;
-                uploadedFiles.forEach((f, i) => mailBody += `  ${i+1}. ${f.name} (${f.size}mm)\n`);
+                mailBody += `วัสดุที่เลือก: ${currentOrder.materialName}\n`;
+                mailBody += `สีที่เลือก: ${currentOrder.colorName}\n`;
+                mailBody += `ความหนาแน่น (Infill): ${currentOrder.infill}%\n`;
+                mailBody += `\nรายชื่อไฟล์ STL ที่ต้องพิมพ์:\n`;
+                uploadedFiles.forEach((f, i) => mailBody += `  ${i+1}. ${f.name} (ขนาด: ${f.size} mm | ปริมาตร: ${f.volume.toFixed(1)} cm³)\n`);
+                mailBody += `\n⚠️ คำแนะนำ: กรุณาแนบไฟล์ STL ทั้งหมดตามรายชื่อข้างต้น และ รูปสลิปโอนเงิน มาพร้อมกับอีเมลฉบับนี้\n`;
             }
 
-            mailBody += `ยอดชำระสุทธิ: ฿${currentOrder.price}\n` +
+            mailBody += `\nยอดชำระสุทธิ: ฿${currentOrder.price}\n` +
                         `----------------------------------\n` +
                         `ข้อมูลการจัดส่ง\n` +
                         `เบอร์โทรศัพท์: ${phone}\n` +
                         `Line ID: ${line || '-'}\n` +
                         `ที่อยู่จัดส่ง: ${address}\n\n` +
-                        `*** แนบสลิปการโอนเงินชำระมาในอีเมลฉบับนี้ ***`;
+                        `*** อย่าลืมแนบสลิปโอนเงินและไฟล์งาน STL มาในอีเมลฉบับนี้ครับ ***`;
 
-            const mailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${CONFIG.shopEmail}&su=แจ้งชำระเงิน_${encodeURIComponent(currentOrder.name)}&body=${encodeURIComponent(mailBody)}`;
+            const subject = `แจ้งชำระเงิน_${currentOrder.name}`;
+            const mailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${CONFIG.shopEmail}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(mailBody)}`;
+            
+            if(currentOrder.type === 'slicer') {
+                alert("ระบบกำลังเปิด Gmail...\n\nกรุณาอย่าลืมแนบไฟล์ STL และรูปสลิปการโอนเงินลงในอีเมลก่อนกดส่งครับ!");
+            }
+            
             window.open(mailUrl);
             closeModal();
         }
@@ -499,14 +506,13 @@
             updatePrice();
         }
 
-               function updatePrice() {
+        function updatePrice() {
             const mat = CONFIG.materials[document.getElementById('material').value];
             const infill = parseFloat(document.getElementById('infill').value);
             if(uploadedFiles.length > 0) {
                 let totalWeight = 0;
                 uploadedFiles.forEach(f => totalWeight += (f.volume * mat.density * (0.2 + (infill * 0.8))) * 1.15);
                 
-                // บวกทั้งค่า Setup และ ค่าจัดส่ง
                 const totalPrice = (totalWeight * mat.price) + CONFIG.setupFee + CONFIG.shippingFee;
                 document.getElementById('val-price').innerText = totalPrice.toLocaleString(undefined, {minimumFractionDigits: 2});
             } else {
