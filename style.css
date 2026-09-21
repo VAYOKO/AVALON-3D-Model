@@ -105,3 +105,25 @@ select, input {
     .sidebar { width: 100%; }
     #render-area { height: 400px; }
 }
+/* ปรับแต่งการเลื่อนดูข้อมูลใน Modal รายละเอียดสินค้า */
+.modal-card { 
+    background: var(--card-bg); 
+    padding: 25px; 
+    border-radius: 15px; 
+    max-width: 500px; 
+    width: 100%; 
+    position: relative;
+    
+    /* กำหนดความสูงสูงสุดไม่เกิน 85% ของความสูงหน้าจอ และเปิด Scrollbar ถ้าเนื้อหายาว */
+    max-height: 85vh; 
+    overflow-y: auto; 
+}
+
+/* ปรับแต่งข้อความรายละเอียดสินค้าให้รองรับการเว้นวรรคบรรทัดและการเลื่อนอ่าน */
+#detail-desc {
+    line-height: 1.7;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    white-space: pre-line; /* รองรับการเว้นบรรทัด \n */
+    margin-top: 15px;
+}
