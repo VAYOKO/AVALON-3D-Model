@@ -188,10 +188,10 @@
                 <div class="option-group">
                     <label>2. ความหนาแน่น (Infill)</label>
                     <select id="infill" onchange="updatePrice()">
-                        <option value="0.15">15% (ประหยัด)</option>
-                        <option value="0.30">30% (มาตรฐาน)</option>
-                        <option value="0.50">50% (แข็งแรง)</option>
-                        <option value="1.00">100% (เนื้อตัน)</option>
+                        <option value="0.55">15% (ประหยัด)</option>
+                        <option value="0.80">30% (มาตรฐาน)</option>
+                        <option value="1.20">50% (แข็งแรง)</option>
+                        <option value="1.80">100% (เนื้อตัน)</option>
                     </select>
                 </div>
             </div>
@@ -252,10 +252,10 @@
             shippingFee: 50,
             materials: {
                 pla_pro: { name: "PLA Pro", price: 3.7, density: 1.25, colors: ["#111111"], colorNames: {"#111111":"สีดำ"} },
-                pla_silk: { name: "PLA Silk", price: 3.8, density: 1.25, colors: ["#FFFF00"], colorNames: {"#FFFF00":"สีทอง"} },
-                petg_hf: { name: "PETG HF", price: 3.6, density: 1.25, colors: ["#ff9800","#4314FF"], colorNames: {"#ff9800":"สีส้ม","#4314FF":"สีน้ำเงิน"} },
+                pla_silk: { name: "PLA Silk", price: 4.8, density: 1.25, colors: ["#FFFF00"], colorNames: {"#FFFF00":"สีทอง"} },
+                petg_hf: { name: "PETG HF", price: 5.6, density: 1.25, colors: ["#ff9800","#4314FF"], colorNames: {"#ff9800":"สีส้ม","#4314FF":"สีน้ำเงิน"} },
                 petg: { 
-                    name: "PETG มาตรฐาน", price: 3.4, density: 1.25, 
+                    name: "PETG มาตรฐาน", price: 4.4, density: 1.25, 
                     colors: ["#3498db","#00cc00","#ff0000","#FFFF00","#A8A8A8","#FFFFFF","#FF99FF","#003300"], 
                     colorNames: {"#3498db":"สีน้ำเงิน", "#00cc00":"สีเขียว", "#ff0000":"สีแดง", "#FFFF00":"สีเหลือง", "#A8A8A8":"สีเทา","#FFFFFF":"สีขาว","#FF99FF":"สีชมพู","#003300":"สีเขียวเข้ม"} 
                 }
