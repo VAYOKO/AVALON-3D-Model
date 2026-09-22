@@ -135,13 +135,33 @@
     </header>
 
     <!-- Tab 1: ร้านค้า -->
-    <main id="tab-store">
-        <div class="hero">
-            <h1>AVALON 3D & Model Shop</h1>
-            <p>ชิ้นงาน 3D Print สำเร็จรูป อุปกรณ์ และของเล่น Fidget Clicker คุณภาพสูง</p>
+   <!-- Tab 1: ร้านค้าสินค้า -->
+<main id="tab-store">
+    <!-- Hero Banner พร้อม Parallax, Overlay และ 3D Model Interactive -->
+    <div class="hero-parallax">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>AVALON 3D & Model Shop</h1>
+                <p>สัมผัสประสบการณ์ชิ้นงาน 3D Print สั่งผลิต และอุปกรณ์การเรียนรู้ระบบควบคุมระดับพรีเมียม</p>
+                <div class="hero-btns">
+                    <button class="buy-btn" onclick="document.getElementById('product-list').scrollIntoView({behavior: 'smooth'})">🛍️ เลือกดูสินค้า</button>
+                    <button class="buy-btn" style="background: var(--accent);" onclick="switchTab('slicer')">🖨️ ประเมินราคา STL</button>
+                </div>
+            </div>
+            <!-- ส่วนแสดงผลโมเดล 3D หมุนได้ในหน้าแรก -->
+            <div class="hero-3d-container">
+                <div id="hero-3d-viewer"></div>
+                <div class="hero-3d-hint">🖱️ คลิกและลากเพื่อหมุนดูโมเดล 3D</div>
+            </div>
         </div>
+    </div>
+
+    <div style="max-width: 1200px; margin: 40px auto 0 auto; padding: 0 20px;">
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 30px;">สินค้าและบริการของเรา</h2>
         <div class="product-grid" id="product-list"></div>
-    </main>
+    </div>
+</main>
 
     <!-- Tab 2: Slicer -->
     <main id="tab-slicer" style="display:none;">
