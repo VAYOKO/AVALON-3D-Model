@@ -1,17 +1,11 @@
 const PRODUCTS = [
     { 
-       const PRODUCTS = [
-    { 
         id: 1, 
         name: "PID Ball and Beam kit", 
-        price: 1499, // แนะนำให้ใส่เป็นตัวเลข เพื่อให้นำไปคำนวณราคารวมค่าส่งได้ถูกต้องครับ
-        
-        // ใส่เป็นอาร์เรย์ รองรับหลายรูปภาพ (ถ้ามีรูปในโฟลเดอร์เดียวกับ index.html ใส่ชื่อไฟล์ได้เลย)
+        price: 1499, 
         images: [
             "ballandbeam1.png"
-           
         ],
-        
         shortDesc: "ชุดคิทสำหรับเรียนรู้ระบบควบคุม PID พร้อมเอกสารเเละคู่มือการเรียน",
         fullDesc: `ประกอบด้วย ESP32 Servo motor สายจั้ม ชิ้นส่วน 3D print
 • ออกเเบบมาเพื่อให้เข้าใจระบบควบคุมสำหรับผู้ที่จะนำไปต่อยอดต่างๆ
@@ -19,22 +13,31 @@ const PRODUCTS = [
 • มีเอกสาร PDF สำหรับใช้เรียนเเละตัวอย่างโปรเเกรมพร้อมอธิบายอย่างละเอียด
 • เหมาะสำหรับผู้ที่มีความรู้ Arduino ระดับปานกลาง หรือผู้ที่สนใจการออกเเบบระบบควบคุมพื้นฐาน`
     },
-    // ... สินค้าชิ้นอื่นๆ
-];
+    { 
         id: 2, 
-        name: "AED Box Fidget Clicker", 
-        price: 180, 
-        img: "https://via.placeholder.com/300x200?text=AED+Clicker",
-        shortDesc: "กล่อง AED จิ๋วพร้อมปุ่มกดจำลอง พกพาง่าย น่ารัก",
-        fullDesc: `กล่อง AED จิ๋วสุดน่ารัก (AED Box Fidget Clicker)\n• ดีไซน์จำลองกล่องกระตุกหัวใจอัตโนมัติ (AED) ในรูปแบบพกพา\n• กลไกปุ่มกดภายในตอบสนองดี สัมผัสสนุกมือ\n• งานพิมพ์สีสันสดใส ไม่หลุดลอกง่าย\n• เหมาะสำหรับมอบเป็นของขวัญให้นักเรียนแพทย์ สายบุคลากรทางการแพทย์`
+        name: "Mini Emergency Push Button Clicker", 
+        price: 150, 
+        images: [
+            "https://via.placeholder.com/300x200?text=Emergency+Button"
+        ],
+        shortDesc: "สวิตช์ปุ่มกดฉุกเฉินขนาดจิ๋ว Fidget เสียงคลิกแน่นเพลิดเพลิน",
+        fullDesc: `สวิตช์ปุ่มกดฉุกเฉินจิ๋ว (Mini Emergency Push Button Clicker)
+• สวิตช์กลไก Tactile Switch คุณภาพสูง ให้สัมผัสการกดที่แน่นและเสียงคลิกสะใจ
+• ขนาดเล็กพกพาง่าย มีช่องสำหรับร้อยพวงกุญแจ
+• ผลิตด้วยงานพิมพ์ 3D ชนิด PLA Pro ความละเอียดสูง`
     },
     { 
         id: 3, 
-        name: "บริการออกแบบ CAD / 3D Model", 
-        price: 500, 
-        img: "https://via.placeholder.com/300x200?text=CAD+Design",
-        shortDesc: "รับออกแบบชิ้นงานวิศวกรรม กลไก สเกลโมเดล ตามสั่ง",
-        fullDesc: `บริการออกแบบชิ้นงาน 3D CAD Parametric\n• รับขึ้นโมเดลชิ้นงานวิศวกรรม กลไกหุ่นยนต์ ชิ้นส่วนทดแทน\n• ออกแบบชิ้นงานสำหรับ 3D Printing โดยเฉพาะ\n• ส่งมอบไฟล์งานครบถ้วน (.STEP, .STL, .F3D)\n• ราคาเริ่มต้น ฿500 (ประเมินตามความซับซ้อนของชิ้นงาน)`
+        name: "AED Box Fidget Clicker", 
+        price: 180, 
+        images: [
+            "https://via.placeholder.com/300x200?text=AED+Clicker"
+        ],
+        shortDesc: "กล่อง AED จิ๋วพร้อมปุ่มกดจำลอง พกพาง่าย น่ารัก",
+        fullDesc: `กล่อง AED จิ๋วสุดน่ารัก (AED Box Fidget Clicker)
+• ดีไซน์จำลองกล่องกระตุกหัวใจอัตโนมัติ (AED) ในรูปแบบพกพา
+• กลไกปุ่มกดภายในตอบสนองดี สัมผัสสนุกมือ
+• เหมาะสำหรับมอบเป็นของขวัญ`
     }
 ];
 
@@ -42,30 +45,50 @@ function renderProducts() {
     const container = document.getElementById('product-list');
     if (!container) return;
 
-    container.innerHTML = PRODUCTS.map(p => `
-        <div class="product-card">
-            <img src="${p.img}" alt="${p.name}" class="product-img" style="cursor:pointer;" onclick="openProductDetail(${p.id})">
-            <div class="product-info">
-                <h3 class="product-title" style="cursor:pointer;" onclick="openProductDetail(${p.id})">${p.name}</h3>
-                <div class="product-desc">${p.shortDesc}</div>
-                <div class="product-price">฿${p.price.toLocaleString()}</div>
-                <div style="display:flex; gap:8px;">
-                    <button class="buy-btn" style="background:#555;" onclick="openProductDetail(${p.id})">🔍 รายละเอียด</button>
-                    <button class="buy-btn" onclick="openProductCheckout(${p.id})">🛒 สั่งซื้อ</button>
+    container.innerHTML = PRODUCTS.map(p => {
+        const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.img || 'https://via.placeholder.com/300x200');
+        
+        return `
+            <div class="product-card">
+                <img src="${mainImg}" alt="${p.name}" class="product-img" style="cursor:pointer;" onclick="openProductDetail(${p.id})">
+                <div class="product-info">
+                    <h3 class="product-title" style="cursor:pointer;" onclick="openProductDetail(${p.id})">${p.name}</h3>
+                    <div class="product-desc">${p.shortDesc}</div>
+                    <div class="product-price">฿${Number(p.price).toLocaleString()}</div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="buy-btn" style="background:#555;" onclick="openProductDetail(${p.id})">🔍 รายละเอียด</button>
+                        <button class="buy-btn" onclick="openProductCheckout(${p.id})">🛒 สั่งซื้อ</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 function openProductDetail(prodId) {
     const prod = PRODUCTS.find(p => p.id === prodId);
     if (!prod) return;
 
-    document.getElementById('detail-img').src = prod.img;
+    const imgList = prod.images && prod.images.length > 0 ? prod.images : [prod.img || 'https://via.placeholder.com/300x200'];
+
+    document.getElementById('detail-img').src = imgList[0];
     document.getElementById('detail-title').innerText = prod.name;
-    document.getElementById('detail-price').innerText = `฿ ${prod.price.toLocaleString()}`;
+    document.getElementById('detail-price').innerText = `฿ ${Number(prod.price).toLocaleString()}`;
     document.getElementById('detail-desc').innerText = prod.fullDesc;
+
+    const galleryContainer = document.getElementById('detail-gallery');
+    if (galleryContainer) {
+        if (imgList.length > 1) {
+            galleryContainer.innerHTML = imgList.map((imgUrl, idx) => `
+                <img src="${imgUrl}" 
+                     style="width:60px; height:60px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid ${idx===0?'var(--primary)':'#ccc'};" 
+                     onclick="changeDetailImage('${imgUrl}', this)">
+            `).join('');
+            galleryContainer.style.display = 'flex';
+        } else {
+            galleryContainer.style.display = 'none';
+        }
+    }
 
     const buyBtn = document.getElementById('detail-buy-btn');
     buyBtn.onclick = function() {
@@ -74,6 +97,13 @@ function openProductDetail(prodId) {
     };
 
     document.getElementById('product-detail-modal').style.display = 'flex';
+}
+
+function changeDetailImage(imgUrl, element) {
+    document.getElementById('detail-img').src = imgUrl;
+    const thumbs = document.querySelectorAll('#detail-gallery img');
+    thumbs.forEach(t => t.style.borderColor = '#ccc');
+    element.style.borderColor = 'var(--primary)';
 }
 
 function closeProductDetail() {
