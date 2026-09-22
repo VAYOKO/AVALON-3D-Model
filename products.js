@@ -19,9 +19,9 @@ const PRODUCTS = [
     { 
         id: 2, 
         name: "คอรส์ Fusion 360 For 3D print!", 
-        price: "2,199", 
+        price: 2199, 
         images: [
-            "FusionFor3D#1.png"
+            "FusionFor3D1.png"
         ],
         shortDesc: "คอร์สเรียน AutoDesk Fusion 360 สำหรับผู้เริ่มต้นเเละผู้ใช้ 3DPrinter",
         fullDesc: `รูปแบบการเรียน: Online Class ผ่าน [ระบุช่องทาง เช่น Zoom / Google Meet]
