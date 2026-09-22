@@ -8,7 +8,7 @@ const PRODUCTS = [
         
         // ใส่เป็นอาร์เรย์ รองรับหลายรูปภาพ (ถ้ามีรูปในโฟลเดอร์เดียวกับ index.html ใส่ชื่อไฟล์ได้เลย)
         images: [
-            "ball_beam_1.jpg",
+            "ballbeam1.png",
             "ball_beam_2.jpg",
             "ball_beam_3.jpg"
         ],
