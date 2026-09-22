@@ -4,7 +4,7 @@ const PRODUCTS = [
         name: "PID Ball and Beam kit", 
         price: 1499, 
         images: [
-            "pid_v2.png"
+            "pidv2.png"
         ],
         shortDesc: "ชุดคิทสำหรับเรียนรู้ระบบควบคุม PID พร้อมเอกสารเเละคู่มือการเรียน",
         fullDesc: `ประกอบด้วย ESP32 Servo motor สายจั้ม ชิ้นส่วน 3D print
