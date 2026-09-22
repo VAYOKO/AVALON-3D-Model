@@ -18,8 +18,8 @@ const PRODUCTS = [
     },
     { 
         id: 2, 
-        name: "Mini Emergency Push Button Clicker", 
-        price: 150, 
+        name: "คอร์ส์ Fusion 360 For 3D print!", 
+        price: "2,199", 
         images: [
             "https://via.placeholder.com/300x200?text=Emergency+Button"
         ],
