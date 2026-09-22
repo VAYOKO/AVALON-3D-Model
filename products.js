@@ -21,7 +21,7 @@ const PRODUCTS = [
         name: "คอร์ส์ Fusion 360 For 3D print!", 
         price: "2,199", 
         images: [
-            "https://via.placeholder.com/300x200?text=Emergency+Button"
+            "FusionFor3D#1.png"
         ],
         shortDesc: "สวิตช์ปุ่มกดฉุกเฉินขนาดจิ๋ว Fidget เสียงคลิกแน่นเพลิดเพลิน",
         fullDesc: `สวิตช์ปุ่มกดฉุกเฉินจิ๋ว (Mini Emergency Push Button Clicker)
