@@ -172,7 +172,7 @@ function initHero3D() {
 
 function animateHero3D() {
     requestAnimationFrame(animateHero3D);
-    if (heroMesh) heroMesh.rotation.y += 0.0083;
+    if (heroMesh) heroMesh.rotation.y += 0.0081;
     if (heroControls) heroControls.update();
     if (heroRenderer) heroRenderer.render(heroScene, heroCamera);
 }
