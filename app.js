@@ -143,7 +143,7 @@ function initHero3D() {
 
     // โหลดไฟล์ body1.stl
     const stlLoader = new THREE.STLLoader();
-    stlLoader.load('body1.stl', function (geometry) {
+    stlLoader.load('Body1.stl', function (geometry) {
         geometry.center(); // จัดตำแหน่งวัตถุให้อยู่กึ่งกลาง
         geometry.computeBoundingBox();
 
