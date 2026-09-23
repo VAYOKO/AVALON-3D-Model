@@ -43,6 +43,23 @@
             </div>
         </div>
 
+        <!-- ส่วนแสดงผล Explode View Interactive -->
+<div style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+    <h2 style="text-align: center; color: var(--primary); margin-bottom: 10px;">🔍 3D Explode View (แยกชิ้นส่วนประกอบ)</h2>
+    <p style="text-align: center; opacity: 0.8; margin-bottom: 20px;">ลากแถบด้านล่างเพื่อแยกชิ้นส่วนโครงสร้างภายในของชิ้นงาน</p>
+
+    <div class="hero-3d-container" style="max-width: 100%; height: 450px; background: #1a1a1a;">
+        <div id="explode-3d-viewer" style="width: 100%; height: 100%;"></div>
+        
+        <!-- แถบควบคุมระยะการแยกชิ้นส่วน (Explode Slider) -->
+        <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 30px; display: flex; align-items: center; gap: 15px; z-index: 10; color: white;">
+            <span>ประกอบแน่น</span>
+            <input type="range" id="explode-slider" min="0" max="100" value="0" style="width: 200px; cursor: pointer;" oninput="updateExplodeView(this.value)">
+            <span>แยกชิ้นส่วน</span>
+        </div>
+    </div>
+</div>
+
         <div style="max-width: 1200px; margin: 40px auto 0 auto; padding: 0 20px;">
             <h2 style="text-align: center; color: var(--primary); margin-bottom: 30px;">สินค้าและบริการของเรา</h2>
             <div class="product-grid" id="product-list"></div>
