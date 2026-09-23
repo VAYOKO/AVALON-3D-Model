@@ -355,11 +355,19 @@ function initExplode3D() {
 
     // ตัวอย่าง: กำหนดรายชื่อไฟล์ชิ้นส่วน และทิศทางที่จะให้ยืดแยกออกมา (Vector X, Y, Z)
     const partsConfig = [
-    
-        { file: '3dmodel/Stepper.stl', color: 0xd44638, dir: new THREE.Vector3(0, 0, 0) },  // ตัวกลาง อยู่กับที่
-        { file: '3dmodel/roter_out.stl', color: 0xffffff, dir: new THREE.Vector3(0, 1, 0) },   // ฝาบน เลื่อนขึ้น
-        { file: '3dmodel/base.stl', color: 0x0046ad, dir: new THREE.Vector3(0, 1, 0) },   // ด้านข้าง เลื่อนขวา
-        { file: '3dmodel/lid.stl', color: 0x0046ad, dir: new THREE.Vector3(0, 1, 0) }   // ด้านข้าง เลื่อนขวา
+    // แก้ไขทิศทาง Vector (dir) ให้ถูกต้องตามชิ้นงานจริง
+const partsConfig = [
+    { 
+        file: '3dmodel/Stepper.stl.stl', // ชิ้นมอเตอร์ (สีส้ม)
+        color: 0xff5533, 
+        dir: new THREE.Vector3(0, 0, 0) // มอเตอร์ให้อยู่กับที่ ไม่ต้องขยับ
+    }, 
+    { 
+        file: '3dmodel/rotor_out.stl', // ชิ้นเกียร์บ็อกซ์ (สีฟ้า)
+        color: 0x0066ff, 
+        dir: new THREE.Vector3(0, 1, 0) // เลื่อนขึ้นด้านบนตามแกน Y (ถ้าเลื่อนลงให้เปลี่ยนเป็น -1)
+    }
+
     ];
 
     const loader = new THREE.STLLoader();
