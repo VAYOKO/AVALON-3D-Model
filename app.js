@@ -141,13 +141,12 @@ function initHero3D() {
     heroControls.enableDamping = true;
     heroControls.enableZoom = false;
 
-    // โหลดไฟล์ body1.stl
+    // โหลดไฟล์ body1.stl (ตรวจสอบชื่อไฟล์บน GitHub ให้ตรงเป๊ะ)
     const stlLoader = new THREE.STLLoader();
-    stlLoader.load('Body1.stl', function (geometry) {
-        geometry.center(); // จัดตำแหน่งวัตถุให้อยู่กึ่งกลาง
+    stlLoader.load('body1.stl', function (geometry) {
+        geometry.center();
         geometry.computeBoundingBox();
 
-        // วัสดุสีแดงแบรนด์ AVALON
         const material = new THREE.MeshPhongMaterial({ 
             color: 0xd44638, 
             shininess: 90, 
@@ -156,40 +155,17 @@ function initHero3D() {
 
         heroMesh = new THREE.Mesh(geometry, material);
 
-        // หากโมเดลตะแคง ให้ตั้งขึ้นด้วยการปลดล็อกบรรทัดนี้:
-        // heroMesh.rotation.x = -Math.PI / 2;
-
-        // ปรับขนาดโมเดลให้พอดีกับกล่อง 3D
         const box = geometry.boundingBox;
         const size = new THREE.Vector3();
         box.getSize(size);
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 32 / maxDim; // ปรับตัวเลขเพื่อเพิ่ม/ลดขนาดตามต้องการ
+        const scale = 32 / maxDim;
         heroMesh.scale.set(scale, scale, scale);
 
         heroScene.add(heroMesh);
     }, undefined, function (error) {
         console.error("ไม่สามารถโหลดไฟล์ STL ในหน้าแรกได้:", error);
     });
-
-    // เริ่มวนแอนิเมชัน
-    animateHero3D();
-}
-
-    heroMesh = new THREE.Mesh(geometry, material);
-
-    // ปรับขนาดและสเกลโมเดลให้พอดีกับกล่อง
-    const box = geometry.boundingBox;
-    const size = new THREE.Vector3();
-    box.getSize(size);
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = 30 / maxDim; // ปรับตัวเลข 30 เพื่อเพิ่ม/ลดขนาดวัตถุในกล่อง
-    heroMesh.scale.set(scale, scale, scale);
-
-    heroScene.add(heroMesh);
-}, undefined, function (error) {
-    console.error("ไม่สามารถโหลดไฟล์ STL ในหน้าแรกได้:", error);
-});
 
     animateHero3D();
 }
