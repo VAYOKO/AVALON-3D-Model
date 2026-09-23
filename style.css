@@ -144,3 +144,37 @@ select, input { width: 100%; padding: 10px; border-radius: 8px; border: 1.5px so
     .sidebar { width: 100%; }
     #render-area { height: 400px; }
 }
+
+/* ขยายขนาดป๊อปอัปหน้ารายละเอียดสินค้าให้กว้างและใหญ่ขึ้น */
+#product-detail-modal .modal-card {
+    max-width: 750px; /* ขยายความกว้างกล่องจากเดิม 480px เป็น 750px */
+    width: 90%;
+    max-height: 90vh; /* ขยายความสูงสูงสุดของกล่อง */
+    padding: 30px;
+}
+
+/* ขยายขนาดรูปภาพหลักในหน้ารายละเอียดให้ใหญ่และชัดเจนยิ่งขึ้น */
+#detail-img {
+    width: 100%;
+    height: 380px; /* ขยายความสูงรูปจากเดิม 250px เป็น 380px */
+    object-fit: contain;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 10px;
+}
+
+/* ขยายขนาดรูปภาพย่อย (Gallery Thumbnails) */
+#detail-gallery img {
+    width: 75px;  /* ขยายขนาดรูปตัวอย่างย่อย */
+    height: 75px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+#detail-gallery img:hover {
+    transform: scale(1.05);
+}
