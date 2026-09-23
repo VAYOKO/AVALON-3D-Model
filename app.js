@@ -143,7 +143,7 @@ function initHero3D() {
 
     // โหลดไฟล์ body1.stl (ตรวจสอบชื่อไฟล์บน GitHub ให้ตรงเป๊ะ)
     const stlLoader = new THREE.STLLoader();
-    stlLoader.load('body1.stl', function (geometry) {
+    stlLoader.load('Body1.stl', function (geometry) {
         geometry.center();
         geometry.computeBoundingBox();
 
