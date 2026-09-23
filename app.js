@@ -324,3 +324,83 @@ window.addEventListener('DOMContentLoaded', () => {
     if (typeof renderProducts === 'function') renderProducts();
     initHero3D();
 });
+
+
+// ================= 3D Explode View Viewer =================
+let explodeScene, explodeCamera, explodeRenderer, explodeControls;
+let explodeParts = []; // อาร์เรย์สำหรับเก็บชิ้นส่วนและทิศทางการแยก
+
+function initExplode3D() {
+    const container = document.getElementById('explode-3d-viewer');
+    if (!container) return;
+
+    explodeScene = new THREE.Scene();
+
+    explodeCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    explodeCamera.position.set(100, 100, 150);
+
+    explodeRenderer = new THREE.WebGLRenderer({ antialias: true });
+    explodeRenderer.setSize(container.clientWidth, container.clientHeight);
+    explodeRenderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(explodeRenderer.domElement);
+
+    // แสงสว่าง
+    explodeScene.add(new THREE.AmbientLight(0xffffff, 0.8));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(100, 200, 100);
+    explodeScene.add(dirLight);
+
+    explodeControls = new THREE.OrbitControls(explodeCamera, explodeRenderer.domElement);
+    explodeControls.enableDamping = true;
+
+    // ตัวอย่าง: กำหนดรายชื่อไฟล์ชิ้นส่วน และทิศทางที่จะให้ยืดแยกออกมา (Vector X, Y, Z)
+    const partsConfig = [
+        { file: 'part_base.stl', color: 0x333333, dir: new THREE.Vector3(0, -1, 0) }, // ฐาน เลื่อนลง
+        { file: 'part_body.stl', color: 0xd44638, dir: new THREE.Vector3(0, 0, 0) },  // ตัวกลาง อยู่กับที่
+        { file: 'part_top.stl', color: 0xffffff, dir: new THREE.Vector3(0, 1, 0) },   // ฝาบน เลื่อนขึ้น
+        { file: 'part_side.stl', color: 0x0046ad, dir: new THREE.Vector3(1, 0, 0) }   // ด้านข้าง เลื่อนขวา
+    ];
+
+    const loader = new THREE.STLLoader();
+
+    partsConfig.forEach(p => {
+        loader.load(p.file, function (geometry) {
+            geometry.center();
+            const material = new THREE.MeshPhongMaterial({ color: p.color, flatShading: true });
+            const mesh = new THREE.Mesh(geometry, material);
+
+            // บันทึกตำแหน่งตั้งต้น และทิศทางการเลื่อน
+            const partObj = {
+                mesh: mesh,
+                basePos: mesh.position.clone(),
+                direction: p.dir
+            };
+
+            explodeParts.push(partObj);
+            explodeScene.add(mesh);
+        });
+    });
+
+    animateExplode3D();
+}
+
+// ฟังก์ชันปรับระยะแยกชิ้นส่วนตามค่า Slider (0 - 100)
+function updateExplodeView(val) {
+    const factor = parseFloat(val) * 0.8; // ปรับตัวคูณความกว้างในการแยก
+    explodeParts.forEach(p => {
+        p.mesh.position.x = p.basePos.x + (p.direction.x * factor);
+        p.mesh.position.y = p.basePos.y + (p.direction.y * factor);
+        p.mesh.position.z = p.basePos.z + (p.direction.z * factor);
+    });
+}
+
+function animateExplode3D() {
+    requestAnimationFrame(animateExplode3D);
+    if (explodeControls) explodeControls.update();
+    if (explodeRenderer) explodeRenderer.render(explodeScene, explodeCamera);
+}
+
+// โหลดระบบ Explode View เมื่อเริ่มเปิดหน้าเว็บ
+window.addEventListener('DOMContentLoaded', () => {
+    initExplode3D();
+});
