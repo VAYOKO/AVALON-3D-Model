@@ -365,21 +365,21 @@ function initExplode3D() {
     const loader = new THREE.STLLoader();
 
     partsConfig.forEach(p => {
-        loader.load(p.file, function (geometry) {
-            geometry.center();
-            const material = new THREE.MeshPhongMaterial({ color: p.color, flatShading: true });
-            const mesh = new THREE.Mesh(geometry, material);
+     loader.load(p.file, function (geometry) {
+    // ไม่ใส่ geometry.center() เพื่อให้ใช้พิกัดอ้างอิงตรงจาก Fusion 360
+    
+    const material = new THREE.MeshPhongMaterial({ color: p.color, flatShading: true });
+    const mesh = new THREE.Mesh(geometry, material);
 
-            // บันทึกตำแหน่งตั้งต้น และทิศทางการเลื่อน
-            const partObj = {
-                mesh: mesh,
-                basePos: mesh.position.clone(),
-                direction: p.dir
-            };
+    const partObj = {
+        mesh: mesh,
+        basePos: mesh.position.clone(),
+        direction: p.dir
+    };
 
-            explodeParts.push(partObj);
-            explodeScene.add(mesh);
-        });
+    explodeParts.push(partObj);
+    explodeScene.add(mesh);
+});
     });
 
     animateExplode3D();
