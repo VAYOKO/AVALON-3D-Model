@@ -355,7 +355,7 @@ function initExplode3D() {
 
     // ตัวอย่าง: กำหนดรายชื่อไฟล์ชิ้นส่วน และทิศทางที่จะให้ยืดแยกออกมา (Vector X, Y, Z)
     const partsConfig = [
-        { file: '3dmodel/Body1.stl', color: 0x333333, dir: new THREE.Vector3(0, -1, 0) }, // ฐาน เลื่อนลง
+    
         { file: '3dmodel/Stepper.stl', color: 0xd44638, dir: new THREE.Vector3(0, 0, 0) },  // ตัวกลาง อยู่กับที่
         { file: '3dmodel/roter_out.stl', color: 0xffffff, dir: new THREE.Vector3(0, 1, 0) },   // ฝาบน เลื่อนขึ้น
         { file: '3dmodel/base.stl', color: 0x0046ad, dir: new THREE.Vector3(1, 0, 0) },   // ด้านข้าง เลื่อนขวา
